@@ -226,7 +226,12 @@ async function readPackages() {
 async function readClients() {
   const payload = await readJson("/api/clients");
   if (payload !== null) return mapList(payload, asClient, localClients);
-  return mapList(await readDeskClients(), asClient, localClients);
+  const desk = await readDeskClients();
+  if (desk.length > 0) {
+    // Keep valid desk rows even if one older row fails validation.
+    return desk.map(asClient).filter((item): item is GymClient => item !== null);
+  }
+  return localClients;
 }
 
 async function readReviews() {

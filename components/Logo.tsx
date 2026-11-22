@@ -11,6 +11,7 @@ export function Logo() {
         height={345}
         className="h-8 w-auto sm:h-9"
         priority
+        unoptimized
       />
     </Link>
   );

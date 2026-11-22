@@ -5,7 +5,15 @@ import { connection } from "next/server";
 const cookieName = "nexis_desk";
 
 function secret() {
-  return process.env.ADMIN_PASSWORD?.trim() ?? "";
+  const raw = process.env.ADMIN_PASSWORD?.trim() ?? "";
+  // Vercel / .env values are sometimes wrapped in quotes.
+  if (
+    (raw.startsWith('"') && raw.endsWith('"')) ||
+    (raw.startsWith("'") && raw.endsWith("'"))
+  ) {
+    return raw.slice(1, -1).trim();
+  }
+  return raw;
 }
 
 function sign(value: string) {
@@ -34,15 +42,18 @@ export async function deskIsSignedIn() {
 
 export async function signInToDesk(password: string) {
   if (!deskPasswordIsSet()) return false;
-  const given = Buffer.from(password);
-  const expected = Buffer.from(secret());
+  const givenText = password.trim();
+  const expectedText = secret();
+  const given = Buffer.from(givenText);
+  const expected = Buffer.from(expectedText);
   if (given.length !== expected.length || !timingSafeEqual(given, expected)) return false;
   const issued = String(Date.now());
   const jar = await cookies();
   jar.set(cookieName, `${issued}.${sign(issued)}`, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    // Only force HTTPS cookies on Vercel. Local `next start` is plain http.
+    secure: process.env.VERCEL === "1",
     path: "/",
     maxAge: 60 * 60 * 24 * 14,
   });

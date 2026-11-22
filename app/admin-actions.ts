@@ -3,12 +3,13 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { updateTag } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import type { GymClient, Post, PostBlock, Review } from "@/content/types";
 import { deskIsSignedIn, signInToDesk, signOutOfDesk } from "@/lib/admin-session";
 import {
   addDeskMessage,
   deleteDeskMessage,
+  deskCanPersistFiles,
   readDeskClients,
   readDeskPosts,
   readDeskReviews,
@@ -38,11 +39,21 @@ const imageKinds: Record<string, string> = {
 async function storeImage(file: FormDataEntryValue | null, folder: string, basename: string) {
   if (!(file instanceof File) || file.size === 0) return { src: "" };
   if (file.size > 1_500_000 || !imageKinds[file.type]) return { error: true as const };
-  const dir = path.join(process.cwd(), "public", folder);
-  await mkdir(dir, { recursive: true });
-  const filename = `${basename}.${imageKinds[file.type]}`;
-  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer()));
-  return { src: `/${folder}/${filename}` };
+  if (process.env.VERCEL === "1") return { error: true as const, host: true as const };
+  try {
+    const dir = path.join(process.cwd(), "public", folder);
+    await mkdir(dir, { recursive: true });
+    const filename = `${basename}.${imageKinds[file.type]}`;
+    await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer()));
+    return { src: `/${folder}/${filename}` };
+  } catch {
+    return { error: true as const, host: true as const };
+  }
+}
+
+function redirectDeskSaveError(path: string, result: { error?: true; host?: true }) {
+  if ("host" in result && result.host) redirect(`${path}?error=host`);
+  redirect(`${path}?error=logo`);
 }
 
 export async function signIn(formData: FormData) {
@@ -63,30 +74,44 @@ export async function saveClient(formData: FormData) {
   const id = slugify(text(formData, "id") || name);
   if (!id || !name || !district) redirect("/admin/clients?error=1");
 
-  const clients = await readDeskClients();
-  const current = clients.find((item) => item.id === id);
-  const logo = await storeImage(formData.get("logo"), "clients", `${id}-logo`);
-  const image = await storeImage(formData.get("image"), "clients", `${id}-photo`);
-  if ("error" in logo || "error" in image) redirect("/admin/clients?error=logo");
+  if (!deskCanPersistFiles()) redirect("/admin/clients?error=host");
 
-  const next: GymClient = {
-    id,
-    name,
-    district,
-    logo: logo.src || current?.logo || "",
-    image: image.src || current?.image || "",
-  };
-  await writeDeskClients([next, ...clients.filter((item) => item.id !== id)]);
-  updateTag("clients");
+  try {
+    const clients = await readDeskClients();
+    const current = clients.find((item) => item.id === id);
+    const logo = await storeImage(formData.get("logo"), "clients", `${id}-logo`);
+    const image = await storeImage(formData.get("image"), "clients", `${id}-photo`);
+    if ("error" in logo) redirectDeskSaveError("/admin/clients", logo);
+    if ("error" in image) redirectDeskSaveError("/admin/clients", image);
+
+    const next: GymClient = {
+      id,
+      name,
+      district,
+      logo: logo.src || current?.logo || "",
+      image: image.src || current?.image || "",
+    };
+    await writeDeskClients([next, ...clients.filter((item) => item.id !== id)]);
+    updateTag("clients");
+  } catch (error) {
+    unstable_rethrow(error);
+    redirect("/admin/clients?error=host");
+  }
   redirect("/admin/clients");
 }
 
 export async function deleteClient(formData: FormData) {
   await requireDesk();
   const id = text(formData, "id");
-  const clients = await readDeskClients();
-  await writeDeskClients(clients.filter((item) => item.id !== id));
-  updateTag("clients");
+  if (!deskCanPersistFiles()) redirect("/admin/clients?error=host");
+  try {
+    const clients = await readDeskClients();
+    await writeDeskClients(clients.filter((item) => item.id !== id));
+    updateTag("clients");
+  } catch (error) {
+    unstable_rethrow(error);
+    redirect("/admin/clients?error=host");
+  }
   redirect("/admin/clients");
 }
 
@@ -98,30 +123,43 @@ export async function saveReview(formData: FormData) {
   const id = slugify(text(formData, "id") || `${name}-${gym}`);
   if (!id || !quote || !name) redirect("/admin/reviews?error=1");
 
-  const reviews = await readDeskReviews();
-  const current = reviews.find((item) => item.id === id);
-  const image = await storeImage(formData.get("image"), "reviews", id);
-  if ("error" in image) redirect("/admin/reviews?error=logo");
+  if (!deskCanPersistFiles()) redirect("/admin/reviews?error=host");
 
-  const next: Review = {
-    id,
-    quote,
-    name,
-    role: text(formData, "role"),
-    gym,
-    image: image.src || current?.image || "",
-  };
-  await writeDeskReviews([next, ...reviews.filter((item) => item.id !== id)]);
-  updateTag("reviews");
+  try {
+    const reviews = await readDeskReviews();
+    const current = reviews.find((item) => item.id === id);
+    const image = await storeImage(formData.get("image"), "reviews", id);
+    if ("error" in image) redirectDeskSaveError("/admin/reviews", image);
+
+    const next: Review = {
+      id,
+      quote,
+      name,
+      role: text(formData, "role"),
+      gym,
+      image: image.src || current?.image || "",
+    };
+    await writeDeskReviews([next, ...reviews.filter((item) => item.id !== id)]);
+    updateTag("reviews");
+  } catch (error) {
+    unstable_rethrow(error);
+    redirect("/admin/reviews?error=host");
+  }
   redirect("/admin/reviews");
 }
 
 export async function deleteReview(formData: FormData) {
   await requireDesk();
   const id = text(formData, "id");
-  const reviews = await readDeskReviews();
-  await writeDeskReviews(reviews.filter((item) => item.id !== id));
-  updateTag("reviews");
+  if (!deskCanPersistFiles()) redirect("/admin/reviews?error=host");
+  try {
+    const reviews = await readDeskReviews();
+    await writeDeskReviews(reviews.filter((item) => item.id !== id));
+    updateTag("reviews");
+  } catch (error) {
+    unstable_rethrow(error);
+    redirect("/admin/reviews?error=host");
+  }
   redirect("/admin/reviews");
 }
 
@@ -138,67 +176,86 @@ export async function savePost(formData: FormData) {
   const drafted = textToBlocks(text(formData, "body"));
   if (!slug || !title || !description || !date || drafted.length === 0) redirect("/admin/blogs?error=1");
 
-  const posts = await readDeskPosts();
-  const current = posts.find((item) => item.slug === slug);
-  const cover = await storeImage(formData.get("cover"), "blog", `${slug}-cover`);
-  if ("error" in cover) redirect("/admin/blogs?error=logo");
+  if (!deskCanPersistFiles()) redirect("/admin/blogs?error=host");
 
-  const uploads = formData.getAll("images");
-  const stored: string[] = [];
-  for (let index = 0; index < uploads.length; index += 1) {
-    const saved = await storeImage(uploads[index], "blog", `${slug}-${index + 1}`);
-    if ("error" in saved) redirect("/admin/blogs?error=logo");
-    if (saved.src) stored.push(saved.src);
-  }
+  try {
+    const posts = await readDeskPosts();
+    const current = posts.find((item) => item.slug === slug);
+    const cover = await storeImage(formData.get("cover"), "blog", `${slug}-cover`);
+    if ("error" in cover) redirectDeskSaveError("/admin/blogs", cover);
 
-  let uploadIndex = 0;
-  const previousImages = current?.blocks.filter((block) => block.type === "image") ?? [];
-  let previousIndex = 0;
-  const blocks: PostBlock[] = [];
-  for (const block of drafted) {
-    if (block.type !== "image") {
-      blocks.push(block);
-      continue;
+    const uploads = formData.getAll("images");
+    const stored: string[] = [];
+    for (let index = 0; index < uploads.length; index += 1) {
+      const saved = await storeImage(uploads[index], "blog", `${slug}-${index + 1}`);
+      if ("error" in saved) redirectDeskSaveError("/admin/blogs", saved);
+      if (saved.src) stored.push(saved.src);
     }
-    const src = stored[uploadIndex] || previousImages[previousIndex]?.src || "";
-    if (stored[uploadIndex]) uploadIndex += 1;
-    else previousIndex += 1;
-    if (!src) redirect("/admin/blogs?error=logo");
-    blocks.push({ type: "image", src, alt: block.alt || title });
-  }
 
-  const next: Post = {
-    slug,
-    title,
-    description,
-    date,
-    updated: new Date().toISOString().slice(0, 10),
-    author: current?.author ?? "Nexfit",
-    tags,
-    readingMinutes: readingMinutes(blocks),
-    relatedSlugs: current?.relatedSlugs ?? [],
-    image: cover.src || current?.image || "",
-    blocks,
-  };
-  const without = posts.filter((item) => item.slug !== slug);
-  await writeDeskPosts([next, ...without]);
-  updateTag("posts");
+    let uploadIndex = 0;
+    const previousImages = current?.blocks.filter((block) => block.type === "image") ?? [];
+    let previousIndex = 0;
+    const blocks: PostBlock[] = [];
+    for (const block of drafted) {
+      if (block.type !== "image") {
+        blocks.push(block);
+        continue;
+      }
+      const src = stored[uploadIndex] || previousImages[previousIndex]?.src || "";
+      if (stored[uploadIndex]) uploadIndex += 1;
+      else previousIndex += 1;
+      if (!src) redirect("/admin/blogs?error=logo");
+      blocks.push({ type: "image", src, alt: block.alt || title });
+    }
+
+    const next: Post = {
+      slug,
+      title,
+      description,
+      date,
+      updated: new Date().toISOString().slice(0, 10),
+      author: current?.author ?? "Nexfit",
+      tags,
+      readingMinutes: readingMinutes(blocks),
+      relatedSlugs: current?.relatedSlugs ?? [],
+      image: cover.src || current?.image || "",
+      blocks,
+    };
+    const without = posts.filter((item) => item.slug !== slug);
+    await writeDeskPosts([next, ...without]);
+    updateTag("posts");
+  } catch (error) {
+    unstable_rethrow(error);
+    redirect("/admin/blogs?error=host");
+  }
   redirect("/admin/blogs");
 }
 
 export async function deletePost(formData: FormData) {
   await requireDesk();
   const slug = text(formData, "slug");
-  const posts = await readDeskPosts();
-  await writeDeskPosts(posts.filter((item) => item.slug !== slug));
-  updateTag("posts");
+  if (!deskCanPersistFiles()) redirect("/admin/blogs?error=host");
+  try {
+    const posts = await readDeskPosts();
+    await writeDeskPosts(posts.filter((item) => item.slug !== slug));
+    updateTag("posts");
+  } catch (error) {
+    unstable_rethrow(error);
+    redirect("/admin/blogs?error=host");
+  }
   redirect("/admin/blogs");
 }
 
 export async function removeMessage(formData: FormData) {
   await requireDesk();
-  await deleteDeskMessage(text(formData, "id"));
-  updateTag("messages");
+  if (!deskCanPersistFiles()) redirect("/admin/messages?error=host");
+  try {
+    await deleteDeskMessage(text(formData, "id"));
+    updateTag("messages");
+  } catch (error) {
+    unstable_rethrow(error);
+    redirect("/admin/messages?error=host");
+  }
   redirect("/admin/messages");
 }
 
@@ -210,6 +267,11 @@ export async function recordInquiry(input: {
   packageInterest: string;
   message: string;
 }) {
-  await addDeskMessage(input);
-  updateTag("messages");
+  if (!deskCanPersistFiles()) return;
+  try {
+    await addDeskMessage(input);
+    updateTag("messages");
+  } catch (error) {
+    unstable_rethrow(error);
+  }
 }

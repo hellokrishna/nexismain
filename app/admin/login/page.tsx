@@ -1,5 +1,5 @@
-import { signIn } from "@/app/admin-actions";
 import { Logo } from "@/components/Logo";
+import { LoginForm } from "@/components/LoginForm";
 import { deskPasswordIsSet } from "@/lib/admin-session";
 
 export const metadata = {
@@ -25,29 +25,7 @@ export default async function LoginPage({
         Clients, blogs, and walkthrough messages live here. This page is not part of the public site.
       </p>
       {ready ? (
-        <form action={signIn} className="mt-8 grid gap-4">
-          <label className="grid gap-2 text-sm font-semibold">
-            Password
-            <input
-              name="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              className="h-12 rounded-2xl border border-line bg-card px-4 font-normal text-foreground"
-            />
-          </label>
-          {error ? (
-            <p role="alert" className="text-sm text-alert">
-              That password did not match.
-            </p>
-          ) : null}
-          <button
-            type="submit"
-            className="inline-flex h-12 items-center justify-center rounded-full bg-lime px-6 font-semibold text-background"
-          >
-            Open the desk
-          </button>
-        </form>
+        <LoginForm error={Boolean(error)} />
       ) : (
         <p className="mt-8 text-sm leading-6 text-muted">
           Set ADMIN_PASSWORD in .env.local to a password of at least 8 characters, then restart the site.

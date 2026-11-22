@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { districtFor, dummyLogo, places } from "@/content/places";
 import type { GymClient } from "@/content/types";
 
@@ -8,43 +7,39 @@ export type ClientCardModel = {
   place: string;
   logo: string;
   image: string;
+  /** Real gym from the desk, not a place placeholder. */
+  real?: boolean;
 };
 
+function isRasterPhoto(src: string) {
+  return /\.(png|jpe?g|webp)$/i.test(src);
+}
+
 export function clientCards(clients: GymClient[]): ClientCardModel[] {
-  const known = new Set<string>(places);
   const cards: ClientCardModel[] = [];
 
-  for (const place of places) {
-    const here = clients.filter((client) => client.district === place);
-    if (here.length === 0) {
-      cards.push({
-        key: place.toLowerCase(),
-        title: place,
-        place: districtFor(place),
-        logo: dummyLogo(place),
-        image: "",
-      });
-      continue;
-    }
-    for (const client of here) {
-      cards.push({
-        key: client.id,
-        title: client.name,
-        place: districtFor(client.district),
-        logo: client.logo || dummyLogo(client.district),
-        image: client.image,
-      });
-    }
-  }
-
+  // Real gyms first, so uploaded logos and photos are easy to spot.
   for (const client of clients) {
-    if (known.has(client.district)) continue;
     cards.push({
-      key: client.id,
+      key: `gym-${client.id}`,
       title: client.name,
       place: districtFor(client.district),
-      logo: client.logo || dummyLogo(client.district),
+      logo: client.logo,
       image: client.image,
+      real: true,
+    });
+  }
+
+  for (const place of places) {
+    const hasGymHere = clients.some((client) => client.district === place);
+    if (hasGymHere) continue;
+    cards.push({
+      key: place.toLowerCase(),
+      title: place,
+      place: districtFor(place),
+      logo: dummyLogo(place),
+      image: "",
+      real: false,
     });
   }
 
@@ -52,25 +47,58 @@ export function clientCards(clients: GymClient[]): ClientCardModel[] {
 }
 
 export function ClientCard({ card, className = "" }: { card: ClientCardModel; className?: string }) {
-  const logo = card.logo || card.image;
+  const hasLogo = Boolean(card.logo);
+  const hasPhoto = Boolean(card.image);
+  // Prefer logo; if none, show the gym photo as a real image; else dummy mark.
+  const media = hasLogo ? card.logo : hasPhoto ? card.image : card.logo;
+  const showAsPhoto = !hasLogo && hasPhoto && isRasterPhoto(card.image);
 
   return (
-    <article className={`flex w-36 flex-col items-center rounded-2xl border border-line bg-card px-3 py-4 text-center ${className}`}>
-      {logo ? (
-        logo.endsWith(".svg") ? (
-          <img src={logo} alt="" width={56} height={56} className="h-14 w-14 rounded-2xl border border-line bg-background object-cover" />
-        ) : (
-          <Image
-            src={logo}
-            alt=""
-            width={56}
-            height={56}
-            className="h-14 w-14 rounded-2xl border border-line object-cover"
+    <article
+      className={`flex w-44 flex-col overflow-hidden rounded-2xl border border-line bg-card text-center ${className}`}
+    >
+      {showAsPhoto ? (
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-background">
+          <img
+            src={card.image}
+            alt={card.title}
+            width={320}
+            height={240}
+            className="h-full w-full object-cover"
           />
-        )
-      ) : null}
-      <h3 className="mt-3 font-display text-sm font-bold leading-tight tracking-tight">{card.title}</h3>
-      <p className="mt-1 text-xs text-muted">{card.place}</p>
+          {/* Soft dark filter so the photo reads as a real gym shot on the card. */}
+          <div
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/80 via-background/15 to-transparent"
+            aria-hidden="true"
+          />
+          <p className="absolute bottom-2 left-2 rounded-full bg-background/70 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-lime">
+            Photo
+          </p>
+        </div>
+      ) : (
+        <div className="flex justify-center px-3 pt-4">
+          <div className="grid h-20 w-20 place-items-center overflow-hidden rounded-2xl border border-line bg-white">
+            {media ? (
+              <img
+                src={media}
+                alt={card.title}
+                width={80}
+                height={80}
+                className="h-full w-full object-contain p-2"
+              />
+            ) : (
+              <span className="text-xs text-muted">Logo</span>
+            )}
+          </div>
+        </div>
+      )}
+      <div className="px-3 py-4">
+        <h3 className="font-display text-sm font-bold leading-tight tracking-tight">{card.title}</h3>
+        <p className="mt-1 text-xs text-muted">{card.place}</p>
+        {card.real && hasLogo ? (
+          <p className="mt-2 text-[0.65rem] uppercase tracking-[0.14em] text-muted">Logo</p>
+        ) : null}
+      </div>
     </article>
   );
 }

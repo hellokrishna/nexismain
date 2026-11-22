@@ -28,9 +28,11 @@ export default async function BlogsPage({
       </p>
       {error ? (
         <p role="alert" className="mt-4 text-sm text-alert">
-          {error === "logo"
-            ? "Use a PNG, JPG, or WEBP under 1.5 MB, and upload a picture for every ! line."
-            : "Title, description, date, and a body are required."}
+          {error === "host"
+            ? "This host cannot save blog files. Publish on your computer, then push data/posts.json and public/blog/."
+            : error === "logo"
+              ? "Use a PNG, JPG, or WEBP under 1.5 MB, and upload a picture for every ! line."
+              : "Title, description, date, and a body are required."}
         </p>
       ) : null}
       <form action={savePost} className="mt-8 grid gap-4 rounded-3xl border border-line bg-card p-5">

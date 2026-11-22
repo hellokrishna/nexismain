@@ -26,7 +26,16 @@ async function readJson<T>(file: string): Promise<T | null> {
   }
 }
 
+export function deskCanPersistFiles() {
+  // Vercel serverless has a read-only filesystem (except /tmp), so desk JSON
+  // and public/ uploads do not stick after the request ends.
+  return process.env.VERCEL !== "1";
+}
+
 async function writeJson(file: string, value: unknown) {
+  if (!deskCanPersistFiles()) {
+    throw new Error("Desk file writes are not available on this host.");
+  }
   await mkdir(dataDir, { recursive: true });
   await writeFile(path.join(dataDir, file), `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
@@ -80,11 +89,12 @@ export async function deleteDeskMessage(id: string) {
 }
 
 export function slugify(value: string) {
-  return value
+  const slug = value
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 70);
+  return slug || randomUUID().slice(0, 8);
 }
 
 export function blocksToText(blocks: PostBlock[]) {
