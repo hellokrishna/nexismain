@@ -183,7 +183,8 @@ export function Dashboards({ clients, reviews }: { clients: GymClient[]; reviews
         <div id="stories" className="mt-20 scroll-mt-24">
           <h3 className="font-display text-3xl font-bold tracking-tight">Clients</h3>
           <p className="mt-3 max-w-2xl text-lg leading-8 text-muted">
-            Gyms running Nexfit across Nepal — only real studios from the desk.
+            Gyms powered by and proudly using Nexfit — fitness centers and studios all around
+            Nepal that run memberships, attendance, and the front desk on one system.
           </p>
           {cards.length > 0 ? (
             <ul className="mt-8 flex flex-wrap items-stretch gap-3">
