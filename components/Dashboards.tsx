@@ -186,9 +186,9 @@ export function Dashboards({ clients, reviews }: { clients: GymClient[]; reviews
             Gyms running Nexfit across Nepal — only real studios from the desk.
           </p>
           {cards.length > 0 ? (
-            <ul className="mt-8 flex flex-wrap gap-3">
+            <ul className="mt-8 flex flex-wrap items-stretch gap-3">
               {cards.map((card) => (
-                <li key={card.key}>
+                <li key={card.key} className="flex">
                   <ClientCard card={card} />
                 </li>
               ))}

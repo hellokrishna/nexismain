@@ -12,16 +12,16 @@ export function ClientMarquee({ clients }: { clients: GymClient[] }) {
       </p>
       <div className="client-marquee mt-5 overflow-hidden">
         <div className="client-track">
-          <ul className="flex gap-4 pr-4">
+          <ul className="flex items-stretch gap-4 pr-4">
             {cards.map((card) => (
-              <li key={card.key}>
+              <li key={card.key} className="flex">
                 <ClientCard card={card} />
               </li>
             ))}
           </ul>
-          <ul className="flex gap-4 pr-4" aria-hidden="true">
+          <ul className="flex items-stretch gap-4 pr-4" aria-hidden="true">
             {cards.map((card) => (
-              <li key={`${card.key}-copy`}>
+              <li key={`${card.key}-copy`} className="flex">
                 <ClientCard card={card} />
               </li>
             ))}
