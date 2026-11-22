@@ -1,26 +1,117 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0c0e0b;
+  --foreground: #f4f1e8;
+  --muted: #c5cdc0;
+  --lime: #d6f25c;
+  --card: #141712;
+  --line: rgba(244, 241, 232, 0.14);
+  --alert: #ffb4a2;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-lime: var(--lime);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-alert: var(--alert);
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
+
+::selection {
+  background: #d6f25c;
+  color: #0c0e0b;
+}
+
+:focus-visible {
+  outline: 2px solid #f4f1e8;
+  outline-offset: 3px;
+}
+
+.floor-grid {
+  background-image:
+    linear-gradient(to right, rgba(214, 242, 92, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(214, 242, 92, 0.07) 1px, transparent 1px);
+  background-size: 84px 84px;
+  mask-image: radial-gradient(ellipse at top left, black 20%, transparent 72%);
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 80;
+  border-radius: 999px;
+  background: #d6f25c;
+  color: #0c0e0b;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+summary {
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Continuous client cards on the landing page. */
+.client-marquee {
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.client-track {
+  display: flex;
+  width: max-content;
+  animation: client-marquee 42s linear infinite;
+}
+
+.client-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes client-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .client-marquee {
+    mask-image: none;
+    overflow-x: auto;
+  }
+
+  .client-track {
+    animation: none;
+  }
+}
+
