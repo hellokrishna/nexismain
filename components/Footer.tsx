@@ -10,7 +10,7 @@ export function Footer({ posts }: { posts: Post[] }) {
         <div className="sm:col-span-2 lg:col-span-1">
           <Logo />
           <p className="mt-4 max-w-xs text-sm leading-6 text-muted">
-            The complete gym management solution for the visit, the membership, and the follow-up.
+            Cloud-based gym software in Nepal for the visit, the membership, and the follow-up.
           </p>
         </div>
         <div>
@@ -43,17 +43,27 @@ export function Footer({ posts }: { posts: Post[] }) {
           </ul>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-lime">Desk</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-lime">Gym portal</p>
           <ul className="mt-4 grid gap-2 text-sm text-muted">
+            <li>
+              <a href={site.portal.register} className="hover:text-foreground">
+                Try free demo / Register
+              </a>
+            </li>
+            <li>
+              <a href={site.portal.login} className="hover:text-foreground">
+                Login
+              </a>
+            </li>
+            <li>
+              <Link href="/#contact" className="hover:text-foreground">
+                Contact us
+              </Link>
+            </li>
             <li>
               <a href={`mailto:${site.email}`} className="hover:text-foreground">
                 {site.email}
               </a>
-            </li>
-            <li>
-              <Link href="/blog" className="hover:text-foreground">
-                All articles
-              </Link>
             </li>
           </ul>
         </div>

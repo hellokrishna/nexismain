@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { nav } from "@/content/site";
+import { nav, site } from "@/content/site";
 import { Logo } from "@/components/Logo";
 
 export function Header() {
@@ -29,12 +29,18 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <Link
-            href="/#contact"
+          <a
+            href={site.portal.login}
+            className="hidden rounded-full border border-line px-4 py-2 text-sm font-semibold transition-colors hover:border-foreground hover:text-foreground sm:inline-flex"
+          >
+            Login
+          </a>
+          <a
+            href={site.portal.register}
             className="hidden rounded-full bg-lime px-4 py-2 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5 sm:inline-flex"
           >
-            Book a walkthrough
-          </Link>
+            Try free demo
+          </a>
           <button
             type="button"
             className="inline-flex h-10 items-center rounded-full border border-line px-3 text-sm lg:hidden"
@@ -61,13 +67,20 @@ export function Header() {
               </li>
             ))}
             <li>
-              <Link
-                href="/#contact"
-                className="mt-2 block rounded-full bg-lime px-3 py-3 text-center font-semibold text-background"
-                onClick={() => setOpen(false)}
+              <a
+                href={site.portal.login}
+                className="mt-2 block rounded-full border border-line px-3 py-3 text-center font-semibold"
               >
-                Book a walkthrough
-              </Link>
+                Login to gym portal
+              </a>
+            </li>
+            <li>
+              <a
+                href={site.portal.register}
+                className="mt-2 block rounded-full bg-lime px-3 py-3 text-center font-semibold text-background"
+              >
+                Try free demo
+              </a>
             </li>
           </ul>
         </nav>

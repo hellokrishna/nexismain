@@ -59,7 +59,7 @@ export function ContactForm({ packages }: { packages: Package[] }) {
         disabled={pending}
         className="inline-flex h-12 items-center justify-center rounded-full bg-lime px-6 font-semibold text-background disabled:opacity-60"
       >
-        {pending ? "Sending…" : "Send to the desk"}
+        {pending ? "Sending…" : "Ask for a demo"}
       </button>
       {message ? (
         <p role={isError ? "alert" : "status"} className={isError ? "text-sm text-alert" : "text-sm text-muted"}>
@@ -67,7 +67,7 @@ export function ContactForm({ packages }: { packages: Package[] }) {
         </p>
       ) : (
         <p className="text-sm text-muted">
-          We save this on the desk and reply by email. No newsletter.
+          We save the demo request on the desk and reply by email. No newsletter.
         </p>
       )}
     </form>

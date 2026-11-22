@@ -18,7 +18,7 @@ const syne = Syne({
   display: "swap",
 });
 
-const title = "Nexfit | Complete gym management solution";
+const title = "Gym Software in Nepal | Nexfit Gym Management System";
 
 export const viewport: Viewport = {
   themeColor: "#0c0e0b",
@@ -32,9 +32,11 @@ export const metadata: Metadata = {
     template: "%s | Nexfit",
   },
   description: site.description,
+  keywords: site.keywords,
   applicationName: site.name,
   authors: [{ name: site.name, url: getSiteUrl() }],
   creator: site.name,
+  publisher: site.name,
   category: "business",
   openGraph: {
     type: "website",
@@ -59,6 +61,13 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? {
+        verification: {
+          google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+        },
+      }
+    : {}),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

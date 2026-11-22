@@ -7,8 +7,8 @@ export function Features({ features }: { features: Feature[] }) {
       <div className="mx-auto w-full max-w-6xl px-5 py-20 sm:py-28">
         <SectionHeading index="02 — Modules" title="Everything you need, on one desk.">
           <p>
-            Accounting, analytics, and the other essentials share the same member. A change in one
-            place is the change everywhere.
+            Cloud-based gym management in Nepal: accounting, analytics, and the other essentials
+            share the same member. A change in one place is the change everywhere.
           </p>
         </SectionHeading>
         <ul className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">

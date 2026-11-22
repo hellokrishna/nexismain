@@ -29,7 +29,7 @@ export const packages: Package[] = [
       "Messaging",
     ],
     highlighted: false,
-    cta: "Book a walkthrough",
+    cta: "Try free demo",
   },
   {
     id: "capacity-1500",
@@ -58,6 +58,6 @@ export const packages: Package[] = [
       "Advanced analytics",
     ],
     highlighted: true,
-    cta: "Book a walkthrough",
+    cta: "Try free demo",
   },
 ];

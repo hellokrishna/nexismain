@@ -1,71 +1,56 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { getPosts } from "@/lib/cms";
-import { formatDate } from "@/lib/format";
+import { BlogCard } from "@/components/BlogCard";
 
 const description =
-  "Notes from Nexfit on memberships, attendance, absentees, door access, diet plans, and gym accounts.";
+  "Guides from Nexfit on gym software in Nepal, gym management in Kathmandu and Chitwan, memberships, attendance, door access, and accounts.";
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: "Blog | Gym software in Nepal",
   description,
+  keywords: [
+    "best gym software",
+    "complete gym software",
+    "gym software in Nepal",
+    "gym management in Nepal",
+    "gym software in Kathmandu",
+    "gym software in Chitwan",
+    "cloud based gym software",
+  ],
   alternates: { canonical: "/blog" },
   openGraph: {
-    title: "Blog | Nexfit",
+    title: "Blog | Gym software in Nepal | Nexfit",
     description,
     url: "/blog",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog | Nexfit",
+    title: "Blog | Gym software in Nepal | Nexfit",
     description,
   },
 };
 
 export default async function BlogPage() {
   const posts = await getPosts();
+  const total = posts.length;
 
   return (
     <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:py-24">
-      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-lime">Journal</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-lime">Blog</p>
       <h1 className="mt-3 max-w-3xl font-display text-5xl font-bold tracking-tight text-balance sm:text-6xl">
-        Notes on running the floor.
+        Latest articles.
       </h1>
-      <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">{description}</p>
-      <ul className="mt-12 grid gap-4">
+      <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
+        {description}{" "}
+        <span className="font-semibold text-foreground">
+          {total} {total === 1 ? "article" : "articles"} total.
+        </span>
+      </p>
+      <ul className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {posts.map((post) => (
           <li key={post.slug}>
-            <article className="overflow-hidden rounded-3xl border border-line bg-card sm:grid sm:grid-cols-[16rem_1fr]">
-              {post.image ? (
-                <Image
-                  src={post.image}
-                  alt=""
-                  width={640}
-                  height={480}
-                  className="aspect-[16/10] h-full w-full object-cover sm:aspect-auto"
-                />
-              ) : null}
-              <div className="p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-lime">
-                {formatDate(post.date)} · {post.readingMinutes} min read
-              </p>
-              <h2 className="mt-3 font-display text-3xl font-bold tracking-tight">
-                <Link href={`/blog/${post.slug}`} className="hover:text-lime">
-                  {post.title}
-                </Link>
-              </h2>
-              <p className="mt-3 max-w-2xl leading-7 text-muted">{post.description}</p>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <li key={tag} className="rounded-full border border-line px-3 py-1 text-xs text-muted">
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-              </div>
-            </article>
+            <BlogCard post={post} />
           </li>
         ))}
       </ul>

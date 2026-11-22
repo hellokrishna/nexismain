@@ -24,7 +24,10 @@ export default async function DeskHome() {
     <>
       <h1 className="font-display text-4xl font-bold tracking-tight">What is on the site</h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">
-        Saving a client or a blog publishes it on the public site. Messages stay on this desk.
+        Clients, reviews, and blogs are stored as JSON in the project{" "}
+        <code className="text-foreground">data/</code> folder, with images under{" "}
+        <code className="text-foreground">public/</code>. Saving a client or a blog publishes it on
+        the public site. Demo requests stay on this desk as messages.
       </p>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {cards.map((card) => (

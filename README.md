@@ -26,6 +26,16 @@ Set `reviewsAreSamples` to `false` in `content/reviews.ts` after the sample quot
 
 Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL` to the real domain before launch. Canonical links, Open Graph, and `sitemap.xml` use that value.
 
+## Get listed on Google
+
+1. Deploy the site on a real domain (for example `https://nexisfitness.com`).
+2. Set `NEXT_PUBLIC_SITE_URL` to that domain and redeploy.
+3. Open [Google Search Console](https://search.google.com/search-console), add the domain or URL prefix property.
+4. Paste the HTML-tag verification code into `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`, redeploy, then click Verify.
+5. Submit `https://your-domain/sitemap.xml` under Sitemaps.
+6. Use URL Inspection on the home page and a few blog posts, then request indexing.
+7. Keep publishing blogs and client pages from `/admin`. Ranking at the top takes time, backlinks, and real searches — meta tags alone do not put a new site at #1 overnight.
+
 ## Laravel later
 
 Leave `LARAVEL_API_URL` empty until the API exists. When it is set, the site reads JSON from:

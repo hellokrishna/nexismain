@@ -92,7 +92,7 @@ function asPackage(value: unknown): Package | null {
     description: typeof item.description === "string" ? item.description : "",
     features: item.features,
     highlighted: Boolean(item.highlighted),
-    cta: typeof item.cta === "string" ? item.cta : "Book a walkthrough",
+    cta: typeof item.cta === "string" ? item.cta : "Try free demo",
   };
 }
 
@@ -282,14 +282,16 @@ export async function getFaqs() {
   "use cache";
   cacheLife("hours");
   cacheTag("faqs");
-  return await readFaqs();
+  const faqs = await readFaqs();
+  return faqs;
 }
 
 export async function getPosts() {
   "use cache";
   cacheLife("hours");
   cacheTag("posts");
-  return readPosts();
+  const posts = await readPosts();
+  return posts;
 }
 
 export async function getPost(slug: string) {

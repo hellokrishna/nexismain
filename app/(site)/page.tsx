@@ -20,8 +20,30 @@ import {
 import { faqJsonLd, softwareJsonLd } from "@/lib/schema";
 
 export const metadata: Metadata = {
+  title: {
+    absolute: "Gym Software in Nepal | Nexfit Gym Management System",
+  },
+  description:
+    "Nexfit is the best gym software and complete gym software in Nepal. Cloud-based gym management for Kathmandu, Chitwan, and gyms across Nepal: members, door access, accounting, and analytics on one desk.",
+  keywords: [
+    "gym software",
+    "best gym software",
+    "complete gym software",
+    "best gym softwares",
+    "gym software in Nepal",
+    "gym management in Nepal",
+    "gym management system in Nepal",
+    "cloud based gym software",
+    "gym software in Kathmandu",
+    "gym software in Chitwan",
+  ],
   alternates: { canonical: "/" },
-  openGraph: { url: "/" },
+  openGraph: {
+    url: "/",
+    title: "Best Gym Software in Nepal | Nexfit",
+    description:
+      "Best gym software and complete gym software for Kathmandu, Chitwan, and gyms across Nepal.",
+  },
 };
 
 export default async function HomePage() {
@@ -44,7 +66,7 @@ export default async function HomePage() {
       <Features features={features} />
       <Steps />
       <Pricing packages={packages} />
-      <BlogPreview posts={posts.slice(0, 3)} />
+      <BlogPreview posts={posts.slice(0, 8)} total={posts.length} />
       <Faq faqs={faqs} />
       <Contact packages={packages} />
     </>

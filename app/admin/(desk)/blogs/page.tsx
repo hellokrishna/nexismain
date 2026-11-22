@@ -20,7 +20,11 @@ export default async function BlogsPage({
     <>
       <h1 className="font-display text-4xl font-bold tracking-tight">Blog posts</h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">
-        A blank line starts a new paragraph. A line that starts with ## is a heading. A block of lines that start with - is a list. A line that starts with ! is a picture, and the uploads below fill those pictures in order.
+        Publish here to show a small card on the site: cover thumbnail, title, and short tagline.
+        Posts are stored in <code className="text-foreground">data/posts.json</code>, covers in{" "}
+        <code className="text-foreground">public/blog/</code>. A blank line starts a new paragraph.
+        ## is a heading. Lines that start with - are a list. A line that starts with ! is a picture;
+        the uploads below fill those pictures in order.
       </p>
       {error ? (
         <p role="alert" className="mt-4 text-sm text-alert">
@@ -36,8 +40,14 @@ export default async function BlogsPage({
           <input name="title" required defaultValue={current?.title ?? ""} className={field} />
         </label>
         <label className="grid gap-2 text-sm font-semibold">
-          Short description
-          <input name="description" required defaultValue={current?.description ?? ""} className={field} />
+          Short tagline
+          <input
+            name="description"
+            required
+            defaultValue={current?.description ?? ""}
+            className={field}
+            placeholder="One short line under the title on the card"
+          />
         </label>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="grid gap-2 text-sm font-semibold">
@@ -50,10 +60,13 @@ export default async function BlogsPage({
           </label>
         </div>
         <label className="grid gap-2 text-sm font-semibold">
-          Cover image
+          Blog thumbnail / cover image
           <input name="cover" type="file" accept="image/png,image/jpeg,image/webp" className="text-sm font-normal" />
         </label>
-        {current?.image ? <p className="text-sm text-muted">Current cover stays unless you choose a new one.</p> : null}
+        <p className="text-sm text-muted">
+          This image is the card thumbnail on the home page and /blog.
+          {current?.image ? " Current cover stays unless you choose a new one." : ""}
+        </p>
         <label className="grid gap-2 text-sm font-semibold">
           Pictures inside the article, in the same order as the ! lines
           <input name="images" type="file" accept="image/png,image/jpeg,image/webp" multiple className="text-sm font-normal" />

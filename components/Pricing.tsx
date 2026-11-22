@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { site } from "@/content/site";
 import type { Package } from "@/content/types";
 import { SectionHeading } from "@/components/SectionHeading";
 
@@ -68,8 +68,8 @@ export function Pricing({ packages }: { packages: Package[] }) {
                   </li>
                 ))}
               </ul>
-              <Link
-                href="/#contact"
+              <a
+                href={site.portal.register}
                 className={
                   item.highlighted
                     ? "mt-8 inline-flex h-12 items-center justify-center rounded-full bg-background px-5 font-semibold text-foreground"
@@ -77,7 +77,7 @@ export function Pricing({ packages }: { packages: Package[] }) {
                 }
               >
                 {item.cta}
-              </Link>
+              </a>
             </li>
           ))}
         </ul>

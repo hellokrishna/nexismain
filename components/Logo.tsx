@@ -3,20 +3,15 @@ import Link from "next/link";
 
 export function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2.5 font-display text-lg font-bold tracking-tight">
+    <Link href="/" aria-label="Nexfit home" className="inline-flex items-center">
       <Image
         src="/brand/nexis-logo.png"
-        alt=""
-        width={395}
-        height={512}
-        className="h-9 w-auto"
+        alt="Nexis"
+        width={717}
+        height={345}
+        className="h-8 w-auto sm:h-9"
+        priority
       />
-      <span>
-        Nexfit
-        <span className="ml-1 font-sans text-[0.68rem] font-semibold tracking-[0.22em] text-lime">
-          SOFTWARE
-        </span>
-      </span>
     </Link>
   );
 }

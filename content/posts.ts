@@ -2,6 +2,155 @@ import type { Post } from "@/content/types";
 
 export const posts: Post[] = [
   {
+    slug: "gym-software-in-nepal",
+    title: "Gym software in Nepal: what a complete desk covers",
+    description:
+      "What gym software in Nepal should run on one desk: members, door access, accounting, analytics, and follow-ups for a modern gym management system.",
+    date: "2026-11-22",
+    updated: "2026-11-22",
+    author: "Nexfit",
+    tags: [
+      "best gym software",
+      "complete gym software",
+      "gym software in Nepal",
+      "gym management system in Nepal",
+      "best gym softwares",
+      "cloud based gym software",
+    ],
+    readingMinutes: 6,
+    relatedSlugs: ["gym-software-in-kathmandu-and-chitwan", "match-gym-bank-transfers"],
+    blocks: [
+      {
+        type: "p",
+        text: "Gym software in Nepal has to do more than open a membership form. The desk, the door, the payments, and the follow-up have to share one member. When those pieces live in different tools, the floor looks busy while the books and the attendance list quietly disagree.",
+      },
+      {
+        type: "h2",
+        text: "What belongs in a gym management system in Nepal",
+      },
+      {
+        type: "p",
+        text: "A complete gym management system in Nepal keeps the member once and uses that record everywhere. Attendance and door access read the same plan the desk sold. Accounting sees the same renewals, lockers, and class fees. Analytics is not a second spreadsheet rebuilt on Friday.",
+      },
+      {
+        type: "ul",
+        items: [
+          "Memberships, remote registration, and renewals",
+          "Door access and attendance on the live plan",
+          "Expiry, credit, and absentee reminders",
+          "Accounting, bank matching, and every gym transaction",
+          "Classes, diet plans, shop sales, and retention messaging",
+        ],
+      },
+      {
+        type: "h2",
+        text: "Why cloud-based gym software helps",
+      },
+      {
+        type: "p",
+        text: "Cloud-based gym software means the owner and the desk can open the same system from the gym or from another place. The backup and the updates are not trapped on one office computer. For many of the best gym softwares teams compare, that shared desk is the difference between a tool and a habit.",
+      },
+      {
+        type: "p",
+        text: "Nexfit is built as that desk for Nepal: one record for the member, the door, the money, and the message that brings them back.",
+      },
+    ],
+  },
+  {
+    slug: "gym-software-in-kathmandu-and-chitwan",
+    title: "Gym software in Kathmandu and Chitwan",
+    description:
+      "How gym software in Kathmandu and gym software in Chitwan can run the same cloud desk for members, door access, and gym management across Nepal.",
+    date: "2026-11-21",
+    updated: "2026-11-21",
+    author: "Nexfit",
+    tags: [
+      "gym software in Kathmandu",
+      "gym software in Chitwan",
+      "gym management in Nepal",
+      "cloud based gym software",
+    ],
+    readingMinutes: 5,
+    relatedSlugs: ["gym-software-in-nepal", "membership-expiry-reminders"],
+    blocks: [
+      {
+        type: "p",
+        text: "Gyms in Kathmandu and Chitwan face the same desk problem: members arrive, payments land in different ways, and the door still has to know who is active. Gym software in Kathmandu and gym software in Chitwan should not force a separate habit for each city. The place changes. The member record should not.",
+      },
+      {
+        type: "h2",
+        text: "One desk for gym management in Nepal",
+      },
+      {
+        type: "p",
+        text: "Gym management in Nepal works when the visit, the package, and the follow-up stay together. A renewal taken in Chitwan should clear the same way as a renewal taken in Kathmandu. A bank transfer still needs a member. An expired plan should not open the door in either place.",
+      },
+      {
+        type: "ul",
+        items: [
+          "The same membership rules for every branch or floor",
+          "Door access that reads the live package",
+          "Reminders for expiry and absentees before people quietly leave",
+          "A visit, a demo, and a migration when you switch from older software",
+        ],
+      },
+      {
+        type: "h2",
+        text: "Ask for a demo in your city",
+      },
+      {
+        type: "p",
+        text: "Nexfit teams visit gyms across Nepal, including Kathmandu and Chitwan. Ask for a demo on the site. We show the software, set up the door device, move the member data, and leave a desk that is ready to run.",
+      },
+    ],
+  },
+  {
+    slug: "cloud-based-gym-management-nepal",
+    title: "Cloud-based gym management for Nepal gyms",
+    description:
+      "Why cloud-based gym software is a practical gym management system in Nepal for owners who need one desk, not another office PC.",
+    date: "2026-11-20",
+    updated: "2026-11-20",
+    author: "Nexfit",
+    tags: [
+      "best gym software",
+      "complete gym software",
+      "cloud based gym software",
+      "gym management system in Nepal",
+      "gym software",
+      "best gym softwares",
+    ],
+    readingMinutes: 5,
+    relatedSlugs: ["gym-software-in-nepal", "door-access-and-attendance"],
+    blocks: [
+      {
+        type: "p",
+        text: "Many gyms still keep the membership list on one machine at the counter. When that machine is busy, or the owner is away, the floor improvises. Cloud-based gym software moves the desk to the browser so the same gym management system in Nepal is available wherever the staff need it.",
+      },
+      {
+        type: "h2",
+        text: "What cloud changes for the desk",
+      },
+      {
+        type: "ul",
+        items: [
+          "The owner can check renewals and earnings without standing at the till.",
+          "Staff can send expiry and absentee messages from the live list.",
+          "Door devices and the membership stay on one plan, not two copies.",
+          "Backups and updates are not trapped on a single office PC.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "Compare the desk, not the buzzwords",
+      },
+      {
+        type: "p",
+        text: "When people search for the best gym softwares, the useful test is simple: does the software keep members, money, the door, and follow-up together? Nexfit is gym software built that way for Nepal, with packages for 500 or 1,500 active members on the device and unlimited members on the software.",
+      },
+    ],
+  },
+  {
     slug: "match-gym-bank-transfers",
     title: "Match gym bank transfers to the right member",
     description:

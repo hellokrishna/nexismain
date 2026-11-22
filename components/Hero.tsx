@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { site } from "@/content/site";
 
 const stills = [
   {
@@ -42,27 +43,34 @@ export function Hero() {
       <div className="relative mx-auto w-full max-w-6xl px-5 pb-16 pt-16 sm:pb-24 sm:pt-24">
         <div className="max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-lime">
-            Gym management in Nepal
+            Gym software in Nepal
           </p>
           <h1 className="mt-4 font-display text-5xl font-bold leading-[0.95] tracking-tight text-balance sm:text-6xl lg:text-7xl">
-            Nexfit is the complete gym management solution.
+            Best gym software. Complete gym software.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-muted">
-            Members, the door, accounting, analytics, and the other essentials run on one desk.
-            Nexfit is gym software in Nepal.
+            Nexfit is the complete gym management solution for Kathmandu, Chitwan, and gyms across
+            Nepal. Members, the door, accounting, analytics, and the other essentials run on one
+            cloud desk.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/#dashboards"
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <a
+              href={site.portal.register}
               className="inline-flex h-12 items-center justify-center rounded-full bg-lime px-6 font-semibold text-background"
             >
-              See the dashboards
-            </Link>
-            <Link
-              href="/#contact"
+              Try free demo
+            </a>
+            <a
+              href={site.portal.login}
               className="inline-flex h-12 items-center justify-center rounded-full border border-line px-6 font-semibold"
             >
-              Book a walkthrough
+              Login to gym portal
+            </a>
+            <Link
+              href="/#dashboards"
+              className="inline-flex h-12 items-center justify-center rounded-full border border-line px-6 font-semibold"
+            >
+              See the dashboards
             </Link>
           </div>
         </div>

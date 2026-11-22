@@ -7,6 +7,26 @@ export const faqs: Faq[] = [
       "The member desk, inquiries, classes, diet plans, the gym shop or cafe, and analytics, plus attendance, door access, memberships, remote registration and renewals, reminders, follow-ups, lockers, accounts, and every gym transaction. They share one member record.",
   },
   {
+    question: "Is Nexfit gym software in Nepal?",
+    answer:
+      "Yes. Nexfit is gym software in Nepal, and many gyms look for the best gym software and complete gym software in one place. It is a complete gym management system for accounting details, analytics, members, the door, and the other essentials on one desk.",
+  },
+  {
+    question: "Is Nexfit the best gym software and complete gym software?",
+    answer:
+      "Nexfit is built as complete gym software: members, door access, accounting, analytics, messaging, classes, and the shop on one record. That is what we mean by best gym software for a Nepal gym that wants one desk, not five tools.",
+  },
+  {
+    question: "Do you cover Kathmandu and Chitwan?",
+    answer:
+      "Yes. Nexfit is gym software in Kathmandu and gym software in Chitwan, and we also work with gyms in Hetauda, Makwanpur, Dhangadhi, Jhapa, Itahari, Sindhuli, Lalitpur, Gandaki, Nawalparasi, and other places across Nepal.",
+  },
+  {
+    question: "Is this cloud-based gym software?",
+    answer:
+      "Yes. Nexfit is cloud-based gym software. The desk runs in the browser, so the owner and the staff can work from the gym or from another place with the same member record.",
+  },
+  {
     question: "Does the door lock use the same membership as the front desk?",
     answer:
       "Yes. Access looks at the membership the desk sold. If the plan is expired or unpaid, the door and the attendance record stay in step instead of drifting apart.",
@@ -42,9 +62,9 @@ export const faqs: Faq[] = [
       "Yes. The switch is easy, and you do not have to manage it. Give us the member data. We handle the migration, set up the door device and the software, and leave a system that is ready to go.",
   },
   {
-    question: "Is this gym software in Nepal?",
+    question: "How do I try a free demo or log in?",
     answer:
-      "Yes. Nexfit is the complete gym management solution, and it is gym software in Nepal. Members, the door, accounting, analytics, and the other essentials run on one desk.",
+      "Register for a free demo at connect.nexisnepal.com/register. If your gym already has an account, log in at connect.nexisnepal.com/login. You can also send a note on this site and we will visit, set up the door device and the software, and train the desk.",
   },
   {
     question: "Who is it for?",

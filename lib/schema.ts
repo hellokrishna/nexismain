@@ -1,6 +1,17 @@
 import type { Faq, Post } from "@/content/types";
+import { places } from "@/content/places";
 import { site } from "@/content/site";
 import { getSiteUrl } from "@/lib/site-url";
+
+const nepalPlaces = places.map((name) => ({
+  "@type": "Place" as const,
+  name,
+  address: {
+    "@type": "PostalAddress" as const,
+    addressLocality: name,
+    addressCountry: "NP",
+  },
+}));
 
 export function organizationJsonLd() {
   const url = getSiteUrl();
@@ -12,6 +23,8 @@ export function organizationJsonLd() {
     logo: `${url}/brand/nexis-logo.png`,
     email: site.email,
     description: site.description,
+    areaServed: [{ "@type": "Country", name: "Nepal" }, ...nepalPlaces],
+    knowsAbout: site.keywords,
   };
 }
 
@@ -23,6 +36,7 @@ export function websiteJsonLd() {
     name: site.name,
     url,
     description: site.description,
+    inLanguage: "en-NP",
     publisher: {
       "@type": "Organization",
       name: site.name,
@@ -38,13 +52,26 @@ export function softwareJsonLd() {
     "@type": "SoftwareApplication",
     name: site.name,
     applicationCategory: "BusinessApplication",
+    applicationSubCategory: "Gym management software",
     operatingSystem: "Web",
     url,
     description: site.description,
+    keywords: site.keywords.join(", "),
+    featureList: [
+      "Membership management",
+      "Door access",
+      "Attendance",
+      "Accounting",
+      "Analytics",
+      "Messaging",
+      "Remote registration",
+    ],
+    areaServed: [{ "@type": "Country", name: "Nepal" }, ...nepalPlaces],
     offers: {
       "@type": "Offer",
       url: `${url}/#packages`,
       availability: "https://schema.org/InStock",
+      priceCurrency: "NPR",
     },
   };
 }

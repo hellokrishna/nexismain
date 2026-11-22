@@ -12,7 +12,7 @@ export default async function MessagesPage() {
     <>
       <h1 className="font-display text-4xl font-bold tracking-tight">Messages</h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">
-        These come from the walkthrough form on the site. They are not published.
+        These come from the Ask for a demo form on the site. They are not published.
       </p>
       {messages.length === 0 ? (
         <p className="mt-8 text-sm text-muted">No messages yet.</p>
