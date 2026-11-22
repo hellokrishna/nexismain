@@ -1,4 +1,4 @@
-import { districtFor, dummyLogo, places } from "@/content/places";
+import { districtFor } from "@/content/places";
 import type { GymClient } from "@/content/types";
 
 export type ClientCardModel = {
@@ -7,7 +7,7 @@ export type ClientCardModel = {
   place: string;
   logo: string;
   image: string;
-  /** Real gym from the desk, not a place placeholder. */
+  /** Real gym from the desk / database. */
   real?: boolean;
 };
 
@@ -16,41 +16,21 @@ function isRasterPhoto(src: string) {
   return /\.(png|jpe?g|webp)(\?|$)/i.test(src);
 }
 
+/** Only real gyms from the desk / Supabase — no place placeholders. */
 export function clientCards(clients: GymClient[]): ClientCardModel[] {
-  const cards: ClientCardModel[] = [];
-
-  // Real gyms first, so uploaded logos and photos are easy to spot.
-  for (const client of clients) {
-    cards.push({
-      key: `gym-${client.id}`,
-      title: client.name,
-      place: districtFor(client.district),
-      logo: client.logo,
-      image: client.image,
-      real: true,
-    });
-  }
-
-  for (const place of places) {
-    const hasGymHere = clients.some((client) => client.district === place);
-    if (hasGymHere) continue;
-    cards.push({
-      key: place.toLowerCase(),
-      title: place,
-      place: districtFor(place),
-      logo: dummyLogo(place),
-      image: "",
-      real: false,
-    });
-  }
-
-  return cards;
+  return clients.map((client) => ({
+    key: `gym-${client.id}`,
+    title: client.name,
+    place: districtFor(client.district),
+    logo: client.logo,
+    image: client.image,
+    real: true,
+  }));
 }
 
 export function ClientCard({ card, className = "" }: { card: ClientCardModel; className?: string }) {
   const hasLogo = Boolean(card.logo);
   const hasPhoto = Boolean(card.image);
-  // Prefer logo; if none, show the gym photo as a real image; else dummy mark.
   const media = hasLogo ? card.logo : hasPhoto ? card.image : card.logo;
   const showAsPhoto = !hasLogo && hasPhoto && isRasterPhoto(card.image);
 
@@ -67,7 +47,6 @@ export function ClientCard({ card, className = "" }: { card: ClientCardModel; cl
             height={240}
             className="h-full w-full object-cover"
           />
-          {/* Soft dark filter so the photo reads as a real gym shot on the card. */}
           <div
             className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/80 via-background/15 to-transparent"
             aria-hidden="true"
@@ -96,7 +75,7 @@ export function ClientCard({ card, className = "" }: { card: ClientCardModel; cl
       <div className="px-3 py-4">
         <h3 className="font-display text-sm font-bold leading-tight tracking-tight">{card.title}</h3>
         <p className="mt-1 text-xs text-muted">{card.place}</p>
-        {card.real && hasLogo ? (
+        {hasLogo ? (
           <p className="mt-2 text-[0.65rem] uppercase tracking-[0.14em] text-muted">Logo</p>
         ) : null}
       </div>

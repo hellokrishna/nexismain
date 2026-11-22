@@ -3,6 +3,7 @@ import { ClientCard, clientCards } from "@/components/ClientCard";
 
 export function ClientMarquee({ clients }: { clients: GymClient[] }) {
   const cards = clientCards(clients);
+  if (cards.length === 0) return null;
 
   return (
     <section aria-label="Clients across Nepal" className="border-t border-line py-8">

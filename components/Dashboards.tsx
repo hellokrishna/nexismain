@@ -183,16 +183,19 @@ export function Dashboards({ clients, reviews }: { clients: GymClient[]; reviews
         <div id="stories" className="mt-20 scroll-mt-24">
           <h3 className="font-display text-3xl font-bold tracking-tight">Clients</h3>
           <p className="mt-3 max-w-2xl text-lg leading-8 text-muted">
-            Our clients all over Nepal, from Chitwan, Kathmandu, Hetauda, Makwanpur, Dhangadhi,
-            Jhapa, Itahari, Sindhuli, and Lalitpur.
+            Gyms running Nexfit across Nepal — only real studios from the desk.
           </p>
-          <ul className="mt-8 flex flex-wrap gap-3">
-            {cards.map((card) => (
-              <li key={card.key}>
-                <ClientCard card={card} />
-              </li>
-            ))}
-          </ul>
+          {cards.length > 0 ? (
+            <ul className="mt-8 flex flex-wrap gap-3">
+              {cards.map((card) => (
+                <li key={card.key}>
+                  <ClientCard card={card} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-8 text-sm text-muted">Client gyms will show here once they are added in the desk.</p>
+          )}
           {reviews.length > 0 ? (
             <div className="mt-12" id="reviews">
               <h3 className="font-display text-3xl font-bold tracking-tight">Reviews</h3>
