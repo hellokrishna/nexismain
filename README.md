@@ -36,6 +36,26 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL` to the real d
 6. Use URL Inspection on the home page and a few blog posts, then request indexing.
 7. Keep publishing blogs and client pages from `/admin`. Ranking at the top takes time, backlinks, and real searches — meta tags alone do not put a new site at #1 overnight.
 
+## Desk + Supabase (Vercel)
+
+Vercel’s filesystem is read-only, so `/admin/clients` cannot write `data/` or `public/` there. Connect a free Supabase project for the database and file storage.
+
+1. Create a project at [supabase.com](https://supabase.com).
+2. Open **SQL** → New query, paste `supabase/schema.sql`, and run it. That creates `clients`, `reviews`, `posts`, `messages`, and a public `desk-media` storage bucket (gym logos/photos under `clients/`, blog covers and article images under `blog/`, review photos under `reviews/`).
+3. Open **Project Settings → API**. Copy the **Project URL** and the **service_role** key (keep that key secret; only the Next.js server uses it).
+4. Locally, put them in `.env.local`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+ADMIN_PASSWORD=your-long-password
+```
+
+5. On Vercel → Project → **Settings → Environment Variables**, add the same three values for Production (and Preview if you use it). Redeploy.
+6. Open the live `/admin`, sign in, and add gyms, blogs, or reviews. Text rows go in the database; covers and photos upload to `desk-media` and show on the marketing site.
+
+Without Supabase, you can still add clients on your computer at `http://localhost:3001/admin/clients`, then commit `data/clients.json` and files under `public/clients/` and push.
+
 ## Laravel later
 
 Leave `LARAVEL_API_URL` empty until the API exists. When it is set, the site reads JSON from:

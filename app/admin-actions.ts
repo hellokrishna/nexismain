@@ -1,7 +1,5 @@
 "use server";
 
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { updateTag } from "next/cache";
 import { redirect, unstable_rethrow } from "next/navigation";
 import type { GymClient, Post, PostBlock, Review } from "@/content/types";
@@ -15,6 +13,7 @@ import {
   readDeskReviews,
   readingMinutes,
   slugify,
+  storeDeskMedia,
   textToBlocks,
   writeDeskClients,
   writeDeskPosts,
@@ -30,25 +29,9 @@ function text(formData: FormData, name: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-const imageKinds: Record<string, string> = {
-  "image/png": "png",
-  "image/jpeg": "jpg",
-  "image/webp": "webp",
-};
-
 async function storeImage(file: FormDataEntryValue | null, folder: string, basename: string) {
   if (!(file instanceof File) || file.size === 0) return { src: "" };
-  if (file.size > 1_500_000 || !imageKinds[file.type]) return { error: true as const };
-  if (process.env.VERCEL === "1") return { error: true as const, host: true as const };
-  try {
-    const dir = path.join(process.cwd(), "public", folder);
-    await mkdir(dir, { recursive: true });
-    const filename = `${basename}.${imageKinds[file.type]}`;
-    await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer()));
-    return { src: `/${folder}/${filename}` };
-  } catch {
-    return { error: true as const, host: true as const };
-  }
+  return storeDeskMedia(file, folder, basename);
 }
 
 function redirectDeskSaveError(path: string, result: { error?: true; host?: true }) {

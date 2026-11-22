@@ -12,7 +12,8 @@ export type ClientCardModel = {
 };
 
 function isRasterPhoto(src: string) {
-  return /\.(png|jpe?g|webp)$/i.test(src);
+  // Local paths and Supabase public URLs both end with a file name.
+  return /\.(png|jpe?g|webp)(\?|$)/i.test(src);
 }
 
 export function clientCards(clients: GymClient[]): ClientCardModel[] {

@@ -1,6 +1,6 @@
 import { deleteClient, saveClient } from "@/app/admin-actions";
 import { places } from "@/content/places";
-import { deskCanPersistFiles, readDeskClients } from "@/lib/desk";
+import { deskCanPersistFiles, deskUsesSupabase, readDeskClients } from "@/lib/desk";
 
 export const metadata = { title: "Clients" };
 
@@ -17,6 +17,7 @@ export default async function ClientsPage({
   const clients = await readDeskClients();
   const current = clients.find((item) => item.id === id);
   const canSave = deskCanPersistFiles();
+  const onSupabase = deskUsesSupabase();
 
   return (
     <>
@@ -26,18 +27,27 @@ export default async function ClientsPage({
         JPG, or WEBP under 1.5 MB each. Prefer the desk at{" "}
         <code className="text-foreground">http://localhost:3001/admin/clients</code> while developing.
       </p>
-      {!canSave ? (
+      {onSupabase ? (
         <p role="status" className="mt-4 rounded-2xl border border-line bg-card px-4 py-3 text-sm leading-6 text-muted">
-          This Vercel deploy cannot save gyms, logos, or photos to disk. Add clients on your computer
-          at <code className="text-foreground">/admin/clients</code>, then commit{" "}
-          <code className="text-foreground">data/clients.json</code> and files under{" "}
-          <code className="text-foreground">public/clients/</code>, and push so the live site updates.
+          Connected to Supabase. Gyms, logos, and photos save to the database and{" "}
+          <code className="text-foreground">desk-media</code> storage, so the live Vercel site can
+          keep them.
+        </p>
+      ) : !canSave ? (
+        <p role="status" className="mt-4 rounded-2xl border border-line bg-card px-4 py-3 text-sm leading-6 text-muted">
+          This Vercel deploy cannot save gyms, logos, or photos to disk. Create a free Supabase
+          project, run <code className="text-foreground">supabase/schema.sql</code>, then set{" "}
+          <code className="text-foreground">NEXT_PUBLIC_SUPABASE_URL</code> and{" "}
+          <code className="text-foreground">SUPABASE_SERVICE_ROLE_KEY</code> on Vercel (and in{" "}
+          <code className="text-foreground">.env.local</code>). Or add clients on your computer and
+          commit <code className="text-foreground">data/clients.json</code> plus files under{" "}
+          <code className="text-foreground">public/clients/</code>.
         </p>
       ) : null}
       {error ? (
         <p role="alert" className="mt-4 text-sm text-alert">
           {error === "host"
-            ? "This host cannot save client files. Use the desk on your computer, then push the files."
+            ? "This host cannot save client files. Connect Supabase, or use the desk on your computer and push the files."
             : error === "logo"
               ? "Use a PNG, JPG, or WEBP under 1.5 MB for each image."
               : "Gym name and place are required. Choose a place from the list."}
